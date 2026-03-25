@@ -7,7 +7,7 @@ data = pd.read_csv("data.csv")
 # selecting input features
 features = data[["study_hours", "concentration", "distraction", "sleep_hours"]]
 
-# target variable (what we want to predict)
+# target variable
 target = data["performance"]
 
 # creating and training the model
@@ -25,15 +25,32 @@ sleep = float(input("Enter your sleep hours: "))
 # making prediction
 result = model.predict([[study, focus, distraction, sleep]])
 
-# giving recommendation based on result
+# converting numeric result to label
 if result[0] == 0:
-    print("\n⚠️ Your performance is likely LOW.")
-    print("Try increasing study time and reducing distractions.\n")
-
+    level = "LOW"
 elif result[0] == 1:
-    print("\n⚡ Your performance is AVERAGE.")
-    print("Work on consistency and improving focus.\n")
-
+    level = "AVERAGE"
 else:
-    print("\n✅ Your performance is GOOD.")
-    print("Keep maintaining your current routine!\n")
+    level = "GOOD"
+
+print(f"\n📊 Predicted Performance Level: {level}")
+
+# basic analysis (this makes it feel smarter)
+print("\n🔍 Analysis:")
+if distraction > 6:
+    print("- High distraction detected")
+if study < 4:
+    print("- Low study time")
+if sleep < 6:
+    print("- Insufficient sleep")
+if focus < 5:
+    print("- Low concentration")
+
+# recommendation
+print("\n💡 Recommendation:")
+if result[0] == 0:
+    print("You should reduce distractions and increase focused study time.")
+elif result[0] == 1:
+    print("Try to improve consistency and manage distractions better.")
+else:
+    print("You're doing well. Maintain your current routine!")
