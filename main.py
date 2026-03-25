@@ -1,34 +1,39 @@
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
-# Load dataset
+# loading the dataset
 data = pd.read_csv("data.csv")
 
-# Features (inputs)
-X = data[["study_hours", "concentration", "distraction", "sleep_hours"]]
+# selecting input features
+features = data[["study_hours", "concentration", "distraction", "sleep_hours"]]
 
-# Target (output)
-y = data["performance"]
+# target variable (what we want to predict)
+target = data["performance"]
 
-# Create model
+# creating and training the model
 model = LogisticRegression()
+model.fit(features, target)
 
-# Train model
-model.fit(X, y)
+print("\n--- Student Study Recommendation System ---\n")
 
-# Take user input
-study_hours = float(input("Enter study hours: "))
-concentration = float(input("Enter concentration level (1-10): "))
-distraction = float(input("Enter distraction level (1-10): "))
-sleep_hours = float(input("Enter sleep hours: "))
+# taking user input
+study = float(input("Enter your daily study hours: "))
+focus = float(input("Enter your concentration level (1-10): "))
+distraction = float(input("Enter your distraction level (1-10): "))
+sleep = float(input("Enter your sleep hours: "))
 
-# Predict performance
-prediction = model.predict([[study_hours, concentration, distraction, sleep_hours]])
+# making prediction
+result = model.predict([[study, focus, distraction, sleep]])
 
-# Recommendation logic
-if prediction[0] == 0:
-    print("Low performance: Reduce distractions and increase study time.")
-elif prediction[0] == 1:
-    print("Average performance: Improve consistency and focus.")
+# giving recommendation based on result
+if result[0] == 0:
+    print("\n⚠️ Your performance is likely LOW.")
+    print("Try increasing study time and reducing distractions.\n")
+
+elif result[0] == 1:
+    print("\n⚡ Your performance is AVERAGE.")
+    print("Work on consistency and improving focus.\n")
+
 else:
-    print("Good performance: Keep maintaining your current routine!")
+    print("\n✅ Your performance is GOOD.")
+    print("Keep maintaining your current routine!\n")
